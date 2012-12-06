@@ -133,7 +133,7 @@ f=open('loosim_%s_data_%d_subs.pkl'%(identifier,nsubs),'wb')
 pickle.dump(corrs,f)
 f.close()
 
-print 'Mean correlation (predicted,true):"
+print 'Mean correlation (predicted,true):'
 for k in corrs.iterkeys():
      print k,N.mean(corrs[k])
 
