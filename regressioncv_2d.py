@@ -23,11 +23,16 @@ else:
     print 'no nsubs specified - assuming %d'%nsubs
 
 # number of simulation runs - 1000 should be enough
-nruns=1000
+if len(sys.argv)>2:
+    nruns=int(sys.argv[2])
+else:
+    nruns=1000
 
 # set this identifier to specify the nature of the
 # simulations - it gets included in the output filename
+
 identifier='random'
+
 
 def get_sample_balcv(x,y,nfolds,pthresh=0.9):
     """
@@ -127,4 +132,9 @@ for run in range(nruns):
 f=open('loosim_%s_data_%d_subs.pkl'%(identifier,nsubs),'wb')
 pickle.dump(corrs,f)
 f.close()
+
+print 'Mean correlation (predicted,true):"
+for k in corrs.iterkeys():
+     print k,N.mean(corrs[k])
+
 
