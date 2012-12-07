@@ -26,7 +26,7 @@ else:
 if len(sys.argv)>2:
     nruns=int(sys.argv[2])
 else:
-    nruns=1000
+    nruns=100
 
 # set this identifier to specify the nature of the
 # simulations - it gets included in the output filename
@@ -34,7 +34,7 @@ else:
 identifier='random'
 
 
-def get_sample_balcv(x,y,nfolds,pthresh=0.9):
+def get_sample_balcv(x,y,nfolds,pthresh=0.8):
     """
     This function uses anova across CV folds to find
     a set of folds that are balanced in their distriutions
@@ -54,9 +54,10 @@ def get_sample_balcv(x,y,nfolds,pthresh=0.9):
             idx[test,ctr]=1
             ctr+=1
 
-        lm=OLS(x-N.mean(x),idx).fit()
+        lm_x=OLS(x-N.mean(x),idx).fit()
+        lm_y=OLS(y-N.mean(y),idx).fit()
 
-        if lm.f_pvalue>pthresh:
+        if lm_x.f_pvalue>pthresh and lm_y.f_pvalue>pthresh:
             good_split=1
 
     # do some reshaping needed for the sklearn linear regression function
@@ -78,6 +79,7 @@ corrs={'splithalf':N.zeros(nruns),'loo':N.zeros(nruns),'balcv_lo':N.zeros(nruns)
 
 print 'running for %d subs'%nsubs
 for run in range(nruns):
+    print 'run', run
     # create the X distribution - this will be doubled over
     x=N.random.rand(nsubs/2).reshape((nsubs/2,1))
 
@@ -126,7 +128,7 @@ for run in range(nruns):
 
     # get results with balanced CV for high and low threshold
     corrs['balcv_lo'][run]=get_sample_balcv(x_all,y_all,8,pthresh=0.001)
-    corrs['balcv_hi'][run]=get_sample_balcv(x_all,y_all,8,pthresh=0.99)
+    corrs['balcv_hi'][run]=get_sample_balcv(x_all,y_all,8,pthresh=0.9)
 
 
 f=open('loosim_%s_data_%d_subs.pkl'%(identifier,nsubs),'wb')
