@@ -26,7 +26,7 @@ else:
 if len(sys.argv)>2:
     nruns=int(sys.argv[2])
 else:
-    nruns=100
+    nruns=1000
 
 # set this identifier to specify the nature of the
 # simulations - it gets included in the output filename
