@@ -68,9 +68,9 @@ corrs={'splithalf':N.zeros(nruns),'loo':N.zeros(nruns),'balcv_lo':N.zeros(nruns)
 
 # data digitized from Demos et al. paper
 data=N.loadtxt('demos_data.txt')
+nsubs=data.shape[0]
 x_all=data[:,0].reshape((nsubs,1))
 y_all=data[:,1].reshape((nsubs,1))
-nsubs=len(x_all)
 
 
 for run in range(nruns):
