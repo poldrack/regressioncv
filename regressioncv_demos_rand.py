@@ -65,7 +65,7 @@ def get_sample_balcv(x,y,nfolds,pthresh=0.8):
 
     # return both -- corrcoef over all prediction/estimates pairs, and
     # mean over corrcoef within each split
-    return N.corrcoef(pred[:,0],y[:,0])[0,1], np.mean(corrs)
+    return N.corrcoef(pred[:,0],y[:,0])[0,1], N.mean(corrs)
 
 
 # data digitized from Demos et al. paper
@@ -114,12 +114,12 @@ print "Scatter-plotting balcv's against means"
 for k in ('balcv_lo', 'balcv_hi'):
     corrs_, mcorrs_ = corrs[k], corrs['m'+k]
     mk = 'm' + k
-    minmax = np.max(np.abs(np.array((corrs_, mcorrs_))))
+    minmax = N.max(N.abs(N.array((corrs_, mcorrs_))))
     fig = pl.figure(figsize=(12, 5))
     pl.subplot(1, 3, 1)
     pl.scatter(corrs_, mcorrs_)
     def lab(l, d):
-        return '%s [%.2g +- %.2g]' %(k, np.mean(d), np.std(d))
+        return '%s [%.2g +- %.2g]' %(k, N.mean(d), N.std(d))
     pl.xlabel(lab(k, corrs_))
     pl.ylabel(lab(mk, mcorrs_))
     pl.grid()
