@@ -35,7 +35,7 @@ def get_sample_balcv(x,y,nfolds,pthresh=0.8):
     
     good_split=0
     while good_split==0:
-        cv=cross_validation.KFold(n=nsubs,n_folds=nfolds,shuffle=True)
+        cv=cross_validation.KFold(n=nsubs,k=nfolds,shuffle=True)
         ctr=0
         idx=N.zeros((nsubs,nfolds)) # this is the design matrix
         for train,test in cv:

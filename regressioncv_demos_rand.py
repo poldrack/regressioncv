@@ -36,7 +36,7 @@ def get_sample_balcv(x,y,nfolds,pthresh=0.8):
     
     good_split=0
     while good_split==0:
-        cv=cross_validation.KFold(n=nsubs,n_folds=nfolds,shuffle=True)
+        cv=cross_validation.KFold(n=nsubs,k=nfolds,shuffle=True)
         ctr=0
         idx=N.zeros((nsubs,nfolds)) # this is the design matrix
         for train,test in cv:
@@ -65,6 +65,7 @@ def get_sample_balcv(x,y,nfolds,pthresh=0.8):
 
 # data digitized from Demos et al. paper
 data=N.loadtxt('demos_data.txt')
+nsubs=data.shape[0]
 x_all=data[:,0].reshape((nsubs,1))
 y_all=data[:,1].reshape((nsubs,1))
 nsubs=len(x_all)
