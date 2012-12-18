@@ -67,7 +67,7 @@ def get_sample_balcv(x,y,nfolds,pthresh=0.8):
     pred=N.zeros((nsubs,1))
     
     for train,test in cv:
-        lr=LinearRegression()
+        lr=LinearRegression(fit_intercept=False)
         lr.fit(x[train,:],y[train,:])
         pred[test]=lr.predict(x[test])
 
@@ -77,6 +77,7 @@ def get_sample_balcv(x,y,nfolds,pthresh=0.8):
 
 corrs={'splithalf':N.zeros(nruns),'loo':N.zeros(nruns),'balcv_lo':N.zeros(nruns),'balcv_hi':N.zeros(nruns)}
 
+ymean=100
 print 'running for %d subs'%nsubs
 for run in range(nruns):
     print 'run', run
@@ -84,15 +85,15 @@ for run in range(nruns):
     x=N.random.rand(nsubs/2).reshape((nsubs/2,1))
 
     # create two completely random Y samples
-    y=N.random.rand(len(x)).reshape(x.shape)
-    y2=N.random.rand(len(x)).reshape(x.shape)
+    y=N.random.rand(len(x)).reshape(x.shape)+ymean
+    y2=N.random.rand(len(x)).reshape(x.shape)+ymean
     
     pred_y=N.zeros(x.shape)
     pred_y2=N.zeros(x.shape)
 
     # compute out-of-sample predictions for each Y dataset
     # i.e balanced split-half crossvalidation 
-    lr=LinearRegression()
+    lr=LinearRegression(fit_intercept=False)
     lr.fit(x,y)
     pred_y2=lr.predict(x)
     lr.fit(x,y2)
@@ -121,7 +122,7 @@ for run in range(nruns):
     loo=cross_validation.LeaveOneOut(nsubs)
     pred_loo=N.zeros(x_all.shape)
     for train,test in loo:
-        lr=LinearRegression()
+        lr=LinearRegression(fit_intercept=False)
         lr.fit(x_all[train,:],y_all[train,:])
         pred_loo[test]=lr.predict(x_all[test])
     corrs['loo'][run]=N.corrcoef(pred_loo[:,0],y_all[:,0])[0,1]
